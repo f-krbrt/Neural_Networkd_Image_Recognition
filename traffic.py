@@ -88,6 +88,18 @@ def get_model():
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
+    #Create a neural Network
+    model = tf.keras.models.Sequential()
+
+    # Add a hidden layout
+    model.add(tf.keras.layers.Conv2D(32, 3, activation="relu", input_shape=(30,30,3)))
+    model.add(tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same'))
+    model.add(tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same'))
+
+
+
+
+
     raise NotImplementedError
 
 
