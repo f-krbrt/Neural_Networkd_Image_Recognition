@@ -22,8 +22,6 @@ def main():
     # Get image arrays and labels for all image files
     images, labels = load_data(sys.argv[1])
 
-    print("load date, voici les labels : ", labels,"\n voici les les images : ")
-    return None
     # Split data into training and testing sets
     labels = tf.keras.utils.to_categorical(labels)
     x_train, x_test, y_train, y_test = train_test_split(
@@ -63,12 +61,8 @@ def load_data(data_dir):
     
     images = []
     labels = []
-    count = 0
     for type_panneau in os.listdir(data_dir):
-        print("DANS LA BOUCLE voici type panneau : ", type_panneau)
         path_panneau_type = os.path.join(data_dir, type_panneau)
-        count += 1
-        print("voici le counte : ", count)
         for image in os.listdir(path_panneau_type):
             img_path = os.path.join(path_panneau_type,image)
 
@@ -92,15 +86,33 @@ def get_model():
     model = tf.keras.models.Sequential()
 
     # Add a hidden layout
-    model.add(tf.keras.layers.Conv2D(32, 3, activation="relu", input_shape=(30,30,3)))
+    model.add(tf.keras.layers.Conv2D(32, (3,3), activation="relu", input_shape=(30,30,3)))
     model.add(tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same'))
-    model.add(tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
 
 
+    model.add(tf.keras.layers.Conv2D(64, (3,3), activation='relu', padding='same'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=(2,2)))
+
+    #Flatten
+    model.add(tf.keras.layers.Flatten())
+
+    #Neural Networks
+    model.add(tf.keras.layers.Dense(128, activation = "relu"))
+    model.add(tf.keras.layers.Dropout(0.5))
+
+    #Sortie
+    model.add(tf.keras.layers.Dense(43, activation = "softmax"))
+
+    model.compile(
+        optimizer = "adam",
+        loss="categorical_crossentropy",
+        metrics = ["accuracy"]
+    )
+
+    return model
 
 
-
-    raise NotImplementedError
 
 
 if __name__ == "__main__":
